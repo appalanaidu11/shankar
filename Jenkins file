@@ -11,7 +11,7 @@ pipeline {
         
         stage('Docker Build') {
             steps {
-                sh"docker build -t appalanaidu11/shankar:0.0.3 ."
+                sh"docker build -t appalanaidu11/siri:0.0.1 ."
              }
          }
          
@@ -19,14 +19,14 @@ pipeline {
             steps {
                     withCredentials([string(credentialsId: 'docker-hub', variable: 'password')]) {
                     sh"docker login -u appalanaidu11 -p ${password}"
-                    sh "docker push appalanaidu11/shankar:0.0.3"
+                    sh "docker push appalanaidu11/siri:0.0.1"
                     }
                 }
             }
             stage('Docker Deploy') {
                 steps {
                     sshagent(['docker']) {
-                    sh"ssh -o StrictHostKeyChecking=no ec2-user@172.31.36.161 docker run -d -p 5050:8080 --name shankar appalanaidu11/shankar:0.0.3"
+                    sh"ssh -o StrictHostKeyChecking=no ec2-user@172.31.36.161 docker run -d -p 5050:8080 --name shankar appalanaidu11/siri:0.0.1"
                    }
             }
         }
