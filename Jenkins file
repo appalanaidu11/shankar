@@ -1,25 +1,24 @@
 pipeline {
     agent any
 
-    stages {
-        stage('git checkout') {
-            steps {
-                git branch: 'main', credentialsId: 'git-hub', url: 'https://github.com/appalanaidu11/java-maven'
-            }
-        }
-        
+     stages {
+          
         stage('maven Build') {
             steps {
-            sh 'mvn clean package'
+                 sh 'mvn clean package'
             }
         }
         
-        stage('Tomcat Depoly') {
+        stage('Docker Build') {
             steps {
-                sshagent(['tomcat-cred']) {
-                 sh "scp -o StrictHostKeyChecking=no target/*.war ec2-user@172.31.41.198:/opt/tomcat9/webapps"
-                 sh "ssh ec2-user@172.31.41.198 /opt/tomcat9/bin/shutdown.sh"
-                 sh "ssh ec2-user@172.31.41.198 /opt/tomcat9/bin/startup.sh"
+                sh"docker build -t appalanaidu11/shankar:0.0.2 ."
+             }
+         }
+         
+         stage('Docker push') {
+            steps {
+                sh"docker login -u appalanaidu11 -p ****"
+                sh "docker push appalanaidu11/shankar:0.0.2"
                 }
             }
         }
