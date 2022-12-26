@@ -11,7 +11,7 @@ pipeline {
         
         stage('Docker Build') {
             steps {
-                sh"docker build -t appalanaidu11/shankar:0.0.2 ."
+                sh"docker build -t appalanaidu11/shankar:0.0.3 ."
              }
          }
          
