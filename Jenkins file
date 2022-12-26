@@ -23,6 +23,11 @@ pipeline {
                     }
                 }
             }
-        }
+            stage('Docker Depoy') {
+                steps {
+                    sshagent(['tomcat-cred']) {
+                    sh"ssh ec2-user@172.31.36.161 docker run -d -p 8080:8080 --name shankar appalanaidu11/shankar:0.0.2"
+                   }
+            }
     }
 
